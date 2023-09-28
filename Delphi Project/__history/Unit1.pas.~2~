@@ -1,0 +1,88 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.Imaging.jpeg, Vcl.ExtCtrls;
+
+type
+  TForm1 = class(TForm)
+    Image1: TImage;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    CheckBox2: TCheckBox;
+    Edit1: TEdit;
+    Edit4: TEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    SpeedButton2: TSpeedButton;
+    DateTimePicker1: TDateTimePicker;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  GunPrim:integer;
+  EOraný:integer;
+  SGiris:TDateTime;
+  SGirisStr:string;
+  SGirisInt:integer;
+  Cinsiyet:Ansistring;
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked then
+begin
+  Edit1.Enabled:=true;
+end
+else
+begin
+  Edit1.Enabled:=false;
+end;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+Application.Terminate;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+Form1.Position:=poScreenCenter;
+Form1.BorderStyle:=bsToolWindow;
+Edit1.Enabled:=false;
+Edit1.MaxLength:=3;
+Edit4.MaxLength:=5;
+
+Edit4.Hint:='Max 5 Basamaklý.';
+Edit1.Hint:='40-100';
+Edit1.ShowHint:=true;
+Edit4.ShowHint:=true;
+
+end;
+
+procedure TForm1.SpeedButton2Click(Sender: TObject);
+begin
+  if (Edit4.Text='') and (RadioButton3.Checked=false and RadioButton4.Checked=false) and (Edit1.Text='') then
+  begin
+     ShowMessage('doldur len');
+  end;
+
+
+end;
+
+end.

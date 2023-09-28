@@ -1,0 +1,1068 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.Imaging.jpeg, Vcl.ExtCtrls;
+
+type
+  TForm1 = class(TForm)
+    Image1: TImage;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    CheckBox2: TCheckBox;
+    Edit1: TEdit;
+    Edit4: TEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    SpeedButton2: TSpeedButton;
+    DateTimePicker1: TDateTimePicker;
+    SpeedButton1: TSpeedButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  GunPrim: integer;
+  EOraný: integer;
+  SGiris: TDateTime;
+  SGirisStr: string;
+  SGirisYil: integer;
+  SGirisInt: integer;
+  Cinsiyet: Ansistring;
+
+  S_Suresi: Ansistring;
+  i: integer;
+
+  Max_Prim : integer;
+
+
+  Gun, Ay, Yil: Word;
+implementation
+
+{$R *.dfm}
+
+uses Unit2;
+
+procedure Sartlar(S_Sure: Ansistring; Yas_Sarti: Ansistring);
+
+begin
+  Form1.hide;
+  Form2.Show;
+  for i := 0 to StrToInt(S_Sure) do
+  begin
+    Form2.Label5.Caption := i.ToString;
+    Sleep(10);
+    Application.ProcessMessages;
+  end;
+
+  for i := 0 to StrToInt(Yas_Sarti) do
+  begin
+    Form2.Label7.Caption := i.ToString;
+    Sleep(10);
+    Application.ProcessMessages;
+  end;
+end;
+
+
+procedure Sartlar2(S_Sure1:Ansistring; Yas_Sarti1:AnsiString);
+begin
+  for i := 0 to StrToInt(S_Sure1) do
+  begin
+    Form2.Label12.Caption:=i.ToString;
+    Sleep(10);
+    Application.ProcessMessages;
+  end;
+
+  for i := 0 to StrToInt(Yas_Sarti1) do
+    begin
+      Form2.Label13.Caption:=i.ToString;
+      Sleep(10);
+      Application.ProcessMessages;
+    end;
+end;
+
+
+procedure Sartlar3(S_Sure2:Ansistring);
+begin
+   for i := 0 to StrToInt(S_Sure2) do
+     begin
+       Form2.label17.Caption:=i.ToString;
+       Sleep(10);
+       Application.ProcessMessages;
+     end;
+end;
+
+function Prim_Sarti(Max_Prim: integer; Prim_Gun: integer): integer;
+
+begin
+  if Max_Prim = Prim_Gun then
+  begin
+    Form2.Label9.Caption := 'Yok!';
+  end
+  else
+  begin
+    result := Max_Prim - Prim_Gun;
+    if Result>0 then
+    begin
+       Form2.Label9.Caption := result.ToString;
+    end
+    else
+    begin
+        Form2.Label9.Caption :='YOK';
+    end;
+
+  end;
+
+end;
+
+
+
+function Prim_Sarti1(Max_Prim1: integer; Prim_Gun1:integer):integer;
+begin
+   if Max_Prim1=GunPrim then
+   begin
+     Form2.label15.Caption:='YOK';
+   end
+   else
+   begin
+     Result:=Max_Prim1-GunPrim;
+     if Result>0 then
+    begin
+       Form2.Label15.Caption := result.ToString;
+    end
+    else
+    begin
+        Form2.Label15.Caption :='YOK';
+    end;
+   end;
+end;
+
+
+
+function Prim_Sarti2(Max_Prim2:integer; Prim_Gun2:integer):Integer;
+begin
+
+  if Max_Prim2=Prim_Gun2 then
+    begin
+      Form2.Label21.Caption:='YOK';
+
+    end
+    else
+    begin
+    Result:=Max_Prim2-Prim_Gun2;
+      if Result>0 then
+        begin
+          Form2.Label21.Caption:=Result.ToString;
+        end
+        else
+        begin
+          Form2.Label21.Caption:='YOK';
+        end;
+    end;
+
+
+end;
+
+procedure TForm1.CheckBox2Click(Sender: TObject);
+begin
+  if CheckBox2.Checked then
+  begin
+    Edit1.Enabled := true;
+  end
+  else
+  begin
+    Edit1.Enabled := false;
+    Edit1.Clear;
+  end;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Application.Terminate;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  Form1.Position := poScreenCenter;
+  Form1.BorderStyle := bsToolWindow;
+  Edit1.Enabled := false;
+  Edit1.MaxLength := 3;
+  Edit4.MaxLength := 4;
+
+  Edit4.Hint := 'Max 5 Basamaklý.';
+  Edit1.Hint := '40-100';
+  Edit1.ShowHint := true;
+  Edit4.ShowHint := true;
+  DateTimePicker1.DateTime:=Now;
+end;
+
+procedure TForm1.SpeedButton1Click(Sender: TObject);
+begin
+  Edit1.Clear;
+  Edit4.Clear;
+  RadioButton3.Checked := false;
+  RadioButton4.Checked := false;
+  CheckBox2.Checked := false;
+  DateTimePicker1.DateTime := Now;
+end;
+
+procedure TForm1.SpeedButton2Click(Sender: TObject);
+
+begin
+  // ENGELLÝLÝK DURUMU KONTROL
+  while true do
+  begin
+    if (CheckBox2.Checked = true) then
+    begin
+      if Edit1.Text = '' then
+      begin
+        MessageDlg('Engellilik Oraný Giriniz!', TMsgDlgType.mtWarning,
+          [TMsgDlgBtn.mbOK], 0);
+
+        exit;
+      end
+
+      else if (StrToInt(Edit1.Text) < 40) or (StrToInt(Edit1.Text) > 100) then
+      begin
+        MessageDlg('Engellilik oraný (40-100) Arasýnda Olmalýdýr!',
+          TMsgDlgType.mtWarning, [TMsgDlgBtn.mbOK], 0);
+        exit;
+      end
+      else
+      begin
+        EOraný := StrToInt(Edit1.Text);
+        break;
+      end;
+
+    end
+    else
+    begin
+      break;
+    end;
+
+  end;
+
+  // DÝÐER KONTROLLER   -1
+
+  while true do
+  begin
+    if (Edit4.Text = '') then
+    begin
+      MessageDlg('Lütfen Prim Gün Sayýnýzý Giriniz!', TMsgDlgType.mtWarning,
+        [TMsgDlgBtn.mbOK], 0);
+      exit;
+    end
+    else
+    begin
+      break;
+    end;
+  end;
+
+  GunPrim := StrToInt(Edit4.Text);
+  SGiris := DateTimePicker1.DateTime;
+  SGirisStr := FormatDateTime('ddmmyyyy', SGiris);
+
+
+  // DÝÐER KONTROLLER   -2
+
+  while true do
+  begin
+    SGiris := DateTimePicker1.Date;
+    SGirisStr := FormatDateTime('yyyy', SGiris);
+    SGirisYil := StrToInt(SGirisStr);
+    if (SGirisYil < 1950) or (SGirisYil > 2036) then
+    begin
+      MessageDlg('Giriþ Tarihi (1950-2050) Arasýnda Olmalýdýr!',
+        TMsgDlgType.mtWarning, [TMsgDlgBtn.mbOK], 0);
+      exit;
+    end
+    else if (GunPrim < 0) or (GunPrim > 7200) then
+    begin
+
+      MessageDlg('Prim Gün (0-7200) Arasýnda Olmalýdýr!', TMsgDlgType.mtWarning,
+        [TMsgDlgBtn.mbOK], 0);
+      exit;
+    end
+    else if ((RadioButton3.Checked = false) and (RadioButton4.Checked = false))
+    then
+    begin
+      MessageDlg('Cinsiyetinizi Seçiniz!', TMsgDlgType.mtWarning,
+        [TMsgDlgBtn.mbOK], 0);
+      exit;
+    end;
+
+    break;
+  end;
+
+
+  //EMEKLÝLÝK MOTORU
+
+  while True do
+        begin
+
+            if (RadioButton3.Checked) and (RadioButton4.Checked=false) then
+               begin
+                 if (SGiris<=EncodeDate(1976,9,8)) then
+                  begin
+                      Sartlar('25','0');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1976, 9, 9)) and (SGiris <= EncodeDate(1979, 5, 23)) then
+                  begin
+                      Sartlar('25','44');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1979, 5, 24)) and (SGiris <= EncodeDate(1980, 11, 23)) then
+                  begin
+                      Sartlar('25','45');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1980, 11, 24)) and (SGiris <= EncodeDate(1982, 5, 23)) then
+                  begin
+                      Sartlar('25','46');
+                      Prim_Sarti(5075,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1982, 5, 24)) and (SGiris <= EncodeDate(1983, 11, 23)) then
+                  begin
+                      Sartlar('25','47');
+                      Prim_Sarti(5150,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1983, 11, 24)) and (SGiris <= EncodeDate(1985, 5, 23)) then
+                  begin
+                      Sartlar('25','48');
+                      Prim_Sarti(5225,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1985, 5, 24)) and (SGiris <= EncodeDate(1986, 11, 23)) then
+                  begin
+                      Sartlar('25','49');
+                      Prim_Sarti(5300,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1986, 11, 24)) and (SGiris <= EncodeDate(1988, 5, 23)) then
+                  begin
+                      Sartlar('25','50');
+                      Prim_Sarti(5375,GunPrim);
+                      break;
+                  end
+                  else if  (SGiris >= EncodeDate(1988, 5, 24)) and (SGiris <= EncodeDate(1989, 11, 23)) then
+                  begin
+                      Sartlar('25','51');
+                      Prim_Sarti(5450,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1989, 11, 24)) and (SGiris <= EncodeDate(1991, 5, 23)) then
+                  begin
+                      Sartlar('25','52');
+                      Prim_Sarti(5525,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1991, 5, 24)) and (SGiris <= EncodeDate(1992, 11, 23)) then
+                  begin
+                      Sartlar('25','53');
+                      Prim_Sarti(5600,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1992, 11, 24)) and (SGiris <= EncodeDate(1994, 5, 23)) then
+                  begin
+                      Sartlar('25','54');
+                      Prim_Sarti(5675,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1994, 5, 24)) and (SGiris <= EncodeDate(1995, 11, 23)) then
+                  begin
+                      Sartlar('25','55');
+                      Prim_Sarti(5750,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1995, 11, 24)) and (SGiris <= EncodeDate(1997, 5, 23)) then
+                  begin
+                      Sartlar('25','56');
+                      Prim_Sarti(5825,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1997, 5, 24)) and (SGiris <= EncodeDate(1998, 11, 23)) then
+                  begin
+                      Sartlar('25','57');
+                      Prim_Sarti(5900,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1998, 11, 24)) and (SGiris <= EncodeDate(1999, 9, 8)) then
+                  begin
+                      Sartlar('25','58');
+                      Prim_Sarti(5975,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1999, 9, 9)) and (SGiris <= EncodeDate(2008, 4, 30)) then
+                  begin
+                      Sartlar('0','60');
+                      Prim_Sarti(7000,GunPrim);
+                      break;
+                  end
+                  else if (SGiris>EncodeDate(2008,5,1)) and (SGiris<=EncodeDate(2035,12,31)) then
+                  begin
+                      Sartlar('0','60');
+                      Prim_Sarti(7200,GunPrim);
+                      break;
+                  end
+
+
+                         //KADINLAR ÝÇÝN EMEKLÝLÝK
+               end
+               else if (RadioButton3.Checked=false) and (RadioButton4.Checked) then
+                begin
+                if (SGiris < EncodeDate(1981, 4, 1))then
+                  begin
+                      Sartlar('20','0');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1981, 4, 1)) and (SGiris <= EncodeDate(1981, 9, 8)) then
+                  begin
+                      Sartlar('20','38');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1981, 9, 9)) and (SGiris <= EncodeDate(1984, 5, 23)) then
+                  begin
+                      Sartlar('20','40');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1984, 5, 24)) and (SGiris <= EncodeDate(1985, 5, 23)) then
+                  begin
+                      Sartlar('20','41');
+                      Prim_Sarti(5000,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1985, 5, 24)) and (SGiris <= EncodeDate(1986, 5, 23)) then
+                  begin
+                      Sartlar('20','42');
+                      Prim_Sarti(5075,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1986, 5, 24)) and (SGiris <= EncodeDate(1987, 5, 23)) then
+                  begin
+                      Sartlar('20','43');
+                      Prim_Sarti(5150,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1987, 5, 24)) and (SGiris <= EncodeDate(1988, 5, 23)) then
+                  begin
+                      Sartlar('20','44');
+                      Prim_Sarti(5225,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1988, 5, 24)) and (SGiris <= EncodeDate(1989, 5, 23)) then
+                  begin
+                      Sartlar('20','45');
+                      Prim_Sarti(5300,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1989, 5, 24)) and (SGiris <= EncodeDate(1991, 5, 23))  then
+                  begin
+                      Sartlar('20','46');
+                      Prim_Sarti(5375,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1990, 5, 24)) and (SGiris <= EncodeDate(1991, 5, 23)) then
+                  begin
+                      Sartlar('20','47');
+                      Prim_Sarti(5450,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1991, 5, 24)) and (SGiris <= EncodeDate(1992, 5, 23)) then
+                  begin
+                      Sartlar('20','48');
+                      Prim_Sarti(5525,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1992, 5, 24)) and (SGiris <= EncodeDate(1993, 5, 23)) then
+                  begin
+                      Sartlar('20','49');
+                      Prim_Sarti(5600,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1993, 5, 24)) and (SGiris <= EncodeDate(1994, 5, 23)) then
+                  begin
+                      Sartlar('20','50');
+                      Prim_Sarti(5675,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1994, 5, 24)) and (SGiris <= EncodeDate(1995, 5, 23)) then
+                  begin
+                      Sartlar('20','51');
+                      Prim_Sarti(5750,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1995, 5, 24)) and (SGiris <= EncodeDate(1996, 5, 23)) then
+                  begin
+                      Sartlar('20','52');
+                      Prim_Sarti(5825,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1996, 5, 24)) and (SGiris <= EncodeDate(1997, 5, 23)) then
+                  begin
+                      Sartlar('20','53');
+                      Prim_Sarti(5900,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1997, 5, 24)) and (SGiris <= EncodeDate(1998, 5, 23)) then
+                  begin
+                      Sartlar('20','54');
+                      Prim_Sarti(5975,GunPrim);
+                      break;
+                  end
+                  else if (SGiris >= EncodeDate(1998, 5, 24)) and (SGiris <= EncodeDate(1999, 5, 23)) then
+                  begin
+                      Sartlar('20','55');
+                      Prim_Sarti(5975,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(1999, 5, 24)) and (SGiris < EncodeDate(1999, 9, 8)) then
+                  begin
+                      Sartlar('20','56');
+                      Prim_Sarti(5975,GunPrim);
+                      break;
+                  end
+                  else if(SGiris > EncodeDate(1999, 9, 8)) and (SGiris <= EncodeDate(2008, 4, 30)) then
+                  begin
+                      Sartlar('0','58');
+                      Prim_Sarti(7000,GunPrim);
+                      break;
+                  end
+                  else if(SGiris >= EncodeDate(2008, 5, 1)) and (SGiris <= EncodeDate(2035, 12, 31)) then
+                  begin
+                      Sartlar('0','58');
+                      Prim_Sarti(7200,GunPrim);
+                      break;
+                  end
+
+
+
+                end;
+
+
+
+        end;
+
+while True do
+  begin
+    if (RadioButton3.Checked) and (RadioButton4.Checked=false) then
+    begin
+
+          if (SGiris<EncodeDate(1976,9,8)) then
+          begin
+
+              Sartlar2('15','55');
+              Prim_Sarti1(3600,GunPrim);
+              break;
+          end
+           else if (SGiris>EncodeDate(1976,9,8)) and (SGiris<=EncodeDate(1999,9,8)) then
+          begin
+            Sartlar2('15','60');
+            Prim_Sarti1(3600,GunPrim);
+            break;
+          end
+          else if (SGiris>=EncodeDate(1999,9,9)) and (SGiris<=EncodeDate(2008,4,30)) then
+          begin
+              Sartlar2('25','60');
+            Prim_Sarti1(4500,GunPrim);
+            break;
+          end
+          else if (SGiris>=EncodeDate(2008,5,1)) and (SGiris<=EncodeDate(2008,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(4600,GunPrim);
+            break;
+          end
+           else if (SGiris>=EncodeDate(2009,1,1)) and (SGiris<=EncodeDate(2009,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(4700,GunPrim);
+            break;
+          end
+           else if (SGiris>=EncodeDate(2010,1,1)) and (SGiris<=EncodeDate(2010,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(4800,GunPrim);
+            break;
+          end
+           else if (SGiris>=EncodeDate(2011,1,1)) and (SGiris<=EncodeDate(2011,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(4900,GunPrim);
+            break;
+          end
+           else if (SGiris>=EncodeDate(2012,1,1)) and (SGiris<=EncodeDate(2012,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(5000,GunPrim);
+            break;
+          end
+          else if (SGiris>=EncodeDate(2013,1,1)) and (SGiris<=EncodeDate(2013,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(5100,GunPrim);
+            break;
+          end
+          else if (SGiris>=EncodeDate(2014,1,1)) and (SGiris<=EncodeDate(2014,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(5200,GunPrim);
+            break;
+          end
+          else if (SGiris>=EncodeDate(2015,1,1)) and (SGiris<=EncodeDate(2015,12,31)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(5300,GunPrim);
+            break;
+          end
+           else if (SGiris>=EncodeDate(2016,1,1)) then
+          begin
+              Sartlar2('0','63');
+            Prim_Sarti1(5400,GunPrim);
+            break;
+          end
+
+    end
+    else if (RadioButton3.Checked=false) and (RadioButton4.Checked) then
+    begin
+         if (SGiris<EncodeDate(1981,9,8)) then
+         begin
+               Sartlar2('15','50');
+            Prim_Sarti1(3600,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(1981,9,8)) and (SGiris<=EncodeDate(1999,9,8)) then
+         begin
+              Sartlar2('15','58');
+            Prim_Sarti1(3600,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(1999,9,8)) and (SGiris<=EncodeDate(2008,4,30)) then
+         begin
+              Sartlar2('25','58');
+            Prim_Sarti1(4500,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2008,5,1)) and (SGiris<=EncodeDate(2008,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(4600,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2009,1,1)) and (SGiris<=EncodeDate(2009,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(4700,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2010,1,1)) and (SGiris<=EncodeDate(2010,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(4800,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2011,1,1)) and (SGiris<=EncodeDate(2011,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(4900,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2012,1,1)) and (SGiris<=EncodeDate(2012,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(5000,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2013,1,1)) and (SGiris<=EncodeDate(2013,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(5100,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2014,1,1)) and (SGiris<=EncodeDate(2014,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(5200,GunPrim);
+            break;
+         end
+         else if (SGiris>=EncodeDate(2015,1,1)) and (SGiris<=EncodeDate(2015,12,31)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(5300,GunPrim);
+            break;
+         end
+         else if (SGiris>EncodeDate(2016,1,1)) then
+         begin
+              Sartlar2('0','61');
+            Prim_Sarti1(5400,GunPrim);
+            break;
+         end
+
+    end;
+
+
+  end;
+
+ if CheckBox2.Checked then
+ begin
+  while True do
+    begin
+
+
+         if SGiris<=EncodeDate(1991, 8, 5) then
+
+         begin
+
+            if (EOraný>=40)and(EOraný<=59) then
+              begin
+
+                Sartlar3('15');
+                Prim_Sarti2(3600,GunPrim);
+                break;
+              end
+              else if (EOraný>=60) and (EOraný<=79) then
+              begin
+                  Sartlar3('15');
+                Prim_Sarti2(3600,GunPrim);
+                break;
+              end
+              else if (EOraný>=80) then
+              begin
+                  Sartlar3('15');
+                Prim_Sarti2(3600,GunPrim);
+                break;
+              end;
+
+
+         end
+        else if (SGiris>=EncodeDate(1991,8,6)) and (SGiris<=EncodeDate(1994,8,5)) then
+          begin
+            if (EOraný>=40)and(EOraný<=59) then
+            begin
+              Sartlar3('16');
+              Prim_Sarti2(3760,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) and (EOraný<=79) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3680,GunPrim);
+              break;
+            end
+            else if (EOraný>=80) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3600,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(1994,8,6)) and (SGiris<=EncodeDate(1997,8,5)) then
+          begin
+            if (EOraný>=40)and(EOraný<=59) then
+            begin
+              Sartlar3('17');
+              Prim_Sarti2(3920,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) and (EOraný<=79) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3760,GunPrim);
+              break;
+            end
+            else if (EOraný>=80) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3600,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(1997,8,6)) and (SGiris<=EncodeDate(2000,8,5)) then
+          begin
+            if (EOraný>=40)and(EOraný<=59) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4080,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) and (EOraný<=79) then
+            begin
+                Sartlar3('17');
+              Prim_Sarti2(3840,GunPrim);
+              break;
+            end
+            else if (EOraný>=80) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3600,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2000,8,6)) and (SGiris<=EncodeDate(2003,8,5)) then
+          begin
+            if (EOraný>=40)and(EOraný<=59) then
+            begin
+              Sartlar3('19');
+              Prim_Sarti2(4240,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) and (EOraný<=79) then
+            begin
+                Sartlar3('18');
+              Prim_Sarti2(33920,GunPrim);
+              break;
+            end
+            else if (EOraný>=80) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3600,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2003,8,6)) and (SGiris<=EncodeDate(2008,9,30)) then
+          begin
+            if (EOraný>=40)and(EOraný<=59) then
+            begin
+              Sartlar3('20');
+              Prim_Sarti2(4400,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) and (EOraný<=79) then
+            begin
+                Sartlar3('18');
+              Prim_Sarti2(4000,GunPrim);
+              break;
+            end
+            else if (EOraný>=80) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3600,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2008,10,1)) and (SGiris<=EncodeDate(2008,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4100,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3700,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3700,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2009,1,1)) and (SGiris<=EncodeDate(2009,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4200,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3800,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3800,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2010,1,1)) and (SGiris<=EncodeDate(2010,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4300,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(3900,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3900,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2011,1,1)) and (SGiris<=EncodeDate(2011,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4400,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(4000,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3960,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2012,1,1)) and (SGiris<=EncodeDate(2012,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4500,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(4100,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3960,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2013,1,1)) and (SGiris<=EncodeDate(2013,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4600,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(4200,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3960,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2014,1,1)) and (SGiris<=EncodeDate(2014,12,31)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4680,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(4300,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3960,GunPrim);
+              break;
+            end;
+
+
+          end
+          else if (SGiris>=EncodeDate(2015,1,1)) then
+          begin
+            if (EOraný>=40)and(EOraný<=49) then
+            begin
+              Sartlar3('18');
+              Prim_Sarti2(4680,GunPrim);
+              break;
+            end
+            else if (EOraný>=50) and (EOraný<=59) then
+            begin
+                Sartlar3('16');
+              Prim_Sarti2(4320,GunPrim);
+              break;
+            end
+            else if (EOraný>=60) then
+            begin
+                Sartlar3('15');
+              Prim_Sarti2(3690,GunPrim);
+              break;
+            end;
+
+
+          end;
+
+    end;
+ end;
+
+
+
+end;
+
+
+end.
